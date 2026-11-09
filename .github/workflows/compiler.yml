@@ -1,0 +1,26 @@
+name: Build Sega Mega Drive ROM
+
+on:
+  push:
+    branches: [ "основной" ]
+  pull_request:
+    branches: [ "основной" ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+
+    - name: Build ROM using SGDK
+      uses: docker://doragasu/sgdk:latest
+      with:
+        args: make -f $SGDK/makefile.gen
+
+    - name: Upload compiled ROM
+      uses: actions/upload-artifact@v4
+      with:
+        name: baldi-sega-rom
+        path: out/rom.bin
